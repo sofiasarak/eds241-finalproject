@@ -1,0 +1,273 @@
+---
+title: "Study Replication"
+format: html
+editor: visual
+---
+
+```{r}
+#| message: false
+#| warning: false
+# load necessary libraries
+library(tidyverse)
+library(estimatr)
+library(sf) 
+library(MASS)
+library(texreg)
+library(broom)
+library(xtable)
+select <- dplyr::select
+```
+
+```{r}
+# recoding functions
+
+
+dv.recode <- function(x){
+  out <- case_when(x=='Not at all' ~ 0,
+                   x=='Only a little' ~ 1,
+                   x=='A moderate amount' ~ 2,
+                   x=='A great deal' ~ 3)
+  return(out)
+}
+
+dv.naming <- function(x){
+  out <- case_when(x=='dv_personal' ~ "1. Personally",
+                   x=='dv_community' ~ "2. Local\nCommunity",
+                   x=='dv_us' ~ "3. United\nStates",
+                   x=='dv_developing' ~ "4. Developing\nCountries",
+                   x=='dv_future' ~ "5. Future\nGenerations")
+  return(out)
+}
+
+policy.recode <- function(x){
+  out <- case_when(x=='Strongly disagree' ~ 0,
+                   x=='Disagree' ~ 1,
+                   x=='Somewhat disagree' ~ 2,
+                   x=='Neither agree nor disagree' ~ 3,
+                   x=='Somewhat agree' ~ 4,
+                   x=='Agree' ~ 5,
+                   x=='Strongly agree' ~ 6)
+  return(out)
+}
+
+policy.naming <- function(x){
+  out <- case_when(x=='dv_policy1' ~ "1. Limit Development\nin Flood Zones",
+                   x=='dv_policy2' ~ "2. Increase\nFlood Insurance",
+                   x=='dv_policy3' ~ "3. Remove Structures\nfrom Flood Zones",
+                   x=='dv_policy4' ~ "4. Build\nFlood Controls")
+  return(out)
+}
+```
+
+```{r}
+# read in data
+
+# survey results
+data1 <- read_csv('./Data/SeaLevelRiseSurvey_California_January+16,+2021_13.54.csv') %>%
+  mutate(geo = "CA") %>%
+  .[-c(1,2),]
+data2 <- read_csv('./Data/SeaLevelRiseSurvey_Florida_January+16,+2021_13.51.csv') %>%
+  mutate(geo = "FL") %>%
+  .[-c(1,2),]
+data3 <- read_csv('./Data/SeaLevelRiseSurvey_NewJersey_January+16,+2021_13.50.csv') %>%
+  mutate(geo = "NJ") %>%
+  .[-c(1,2),]
+data4 <- read_csv('./Data/SeaLevelRiseSurvey_Virginia_January+16,+2021_13.50.csv') %>%
+  mutate(geo = "VA") %>%
+  .[-c(1,2),]
+
+# districts and their minimums
+dist1 <- read_csv('./Data/ca_dist_mins.csv')
+dist2 <- read_csv('./Data/fl_dist_mins.csv')
+dist3 <- read_csv('./Data/nj_dist_mins.csv')
+dist4 <- read_csv('./Data/va_dist_mins.csv')
+
+# census tracts and asssociated info
+cw1 <- read_csv('./Data/ca_combined_final_withtraffic_sub.csv')
+cw2 <- read_csv('./Data/fl_combined_final.csv')
+cw3 <- read_csv('./Data/nj_combined_final.csv')
+cw4 <- read_csv('./Data/va_combined_final.csv')
+
+# flood zones
+fld_zone <- read.csv('./Data/fld_zone.csv')
+```
+
+
+```{r}
+# data cleaning
+dist <- dist1 %>%
+  bind_rows(dist2) %>%
+  bind_rows(dist3) %>%
+  bind_rows(dist4) %>%
+  filter(!duplicated(.)) %>% 
+  group_by(adds) %>%
+  filter(dist_min == min(dist_min)) %>% 
+  inner_join(cw1 %>%
+               bind_rows(cw2) %>%
+               bind_rows(cw3) %>%
+               bind_rows(cw4) %>%
+               select(adds, email, FID) %>%
+               filter(!duplicated(.))) %>%
+  rename(RecipientEmail=email) %>%
+  inner_join(fld_zone %>% 
+               select(adds, COUNTYFP, TRACTCE, FLD_ZONE) %>%
+               filter(!duplicated(.))) 
+
+data <- data1 %>%
+  bind_rows(data2) %>%
+  bind_rows(data3) %>%
+  bind_rows(data4) %>%
+  left_join(dist) %>%
+  mutate(treat_map = !is.na(exp_emphasis),
+         slr = str_detect(img, "SLR"),
+         traf = as.numeric(traf),
+         traf = ifelse(traf>250, 250, traf),
+         treat_traf = !is.na(`Q88_Page Submit`),
+         treat_traf = ifelse(geo=="CA", treat_traf, NA),
+         dv_personal = dv.recode(slharmpersonal),
+         dv_community = dv.recode(slharmbayarea),
+         dv_us = dv.recode(slharmUS),
+         dv_developing = dv.recode(slharmdeveloping),
+         dv_future = dv.recode(slharmfuture),
+         dv_personal_dk = ifelse(slharmpersonal=="Don't know", 1, 0),
+         dv_community_dk = ifelse(slharmbayarea=="Don't know", 1, 0),
+         dv_us_dk = ifelse(slharmUS=="Don't know", 1, 0),
+         dv_developing_dk = ifelse(slharmdeveloping=="Don't know", 1, 0),
+         dv_future_dk = ifelse(slharmfuture=="Don't know", 1, 0),
+         race_asian = str_detect(race, 'Asian'),
+         race_black = str_detect(race, 'African American'),
+         race_hispanic = str_detect(race, 'Hispanic'),
+         race_white = str_detect(race, 'Caucasian'),
+         pid = case_when(party=="Democrat" ~ "D",
+                         party=="Republican" ~ "R",
+                         party %in% c("Independent", "Other Party") & partylean=='Closer to the Republican Party' ~ "R",
+                         party %in% c("Independent", "Other Party") & partylean=='Closer to the Democratic Party' ~ "D",
+                         party %in% c("Independent", "Other Party") ~ "I"),
+         pid_num = case_when(party=="Democrat" ~ 1,
+                             party=="Republican" ~ 5,
+                             party %in% c("Independent", "Other Party") & partylean=='Closer to the Republican Party' ~ 4,
+                             party %in% c("Independent", "Other Party") & partylean=='Closer to the Democratic Party' ~ 2,
+                             party %in% c("Independent", "Other Party") ~ 3),
+         WTP_money = as.numeric(WTP_money),
+         wtp_dv = case_when(wtpstrength=='Strongly oppose' ~ 0,
+                            wtpstrength=='Somewhat oppose' ~ 1,
+                            wtpstrength=='Somewhat support' ~ 2,
+                            wtpstrength=='Strongly support' ~ 3),
+         dv_policy1 = policy.recode(Q740_1),
+         dv_policy2 = policy.recode(Q740_2),
+         dv_policy3 = policy.recode(Q740_3),
+         dv_policy4 = policy.recode(Q740_4),
+         belief_gq = case_when(linkGQ=='Definitely not' ~ 0,
+                               linkGQ=='Probably not' ~ 1,
+                               linkGQ=='Might or might not be' ~ 2,
+                               linkGQ=='Probably yes' ~ 3,
+                               linkGQ=='Definitely yes' ~ 4),
+         social_talk = case_when(slneighbor=='Never' ~ 0,
+                                 slneighbor=='Rarely' ~ 1,
+                                 slneighbor=='Sometimes' ~ 2,
+                                 slneighbor=='Often' ~ 4),
+         flood_impact = case_when(SysRiskElse=="Not at all" ~ 0,
+                                  SysRiskElse=="Only a little" ~ 1,
+                                  SysRiskElse=="A moderate amount" ~ 2,
+                                  SysRiskElse=="A great deal" ~ 3),
+         climate_belief = case_when(gwhuman=='Caused mostly by human activities' ~ "Human Activity",
+                                    T ~ "No GW/Natural Changes"),
+         dist_min = ifelse(slr==T, dist_min*-1, dist_min),
+         ideo_num = case_when(ideo=='Extremely conservative' ~ 7,
+                              ideo=='Conservative' ~ 6,
+                              ideo=='Slightly conservative' ~ 5,
+                              ideo=='Moderate; middle of the road' ~ 4,
+                              ideo=='Slightly liberal' ~ 3,
+                              ideo=='Liberal' ~ 2,
+                              ideo=='Extremely liberal' ~ 1))
+```
+
+```{r}
+# map experiment
+data %>%
+  select(starts_with('treat_'), starts_with('dv_'), geo, slr) %>%
+  pivot_longer(cols=starts_with('dv_')) %>%
+  group_by(name, slr, value) %>%
+  filter(!is.na(slr) & !is.na(value) & treat_map == 0) %>%
+  summarise(count = n()) %>%
+  group_by(name, slr) %>%
+  mutate(pct = count/sum(count)) %>%
+  mutate(slr = case_when(slr==FALSE  ~ "Outside",
+                          slr==TRUE ~ "Inside"),
+         name = dv.naming(name),
+         value = case_when(value==0 ~  '1. Not at all',
+                           value==1 ~ '2. Only a little',
+                           value==2 ~ '3. A moderate amount',
+                           value==3 ~ '4. A great deal')) %>%
+  filter(!is.na(name)) %>%
+  ggplot() + 
+  geom_col(aes(x = slr, y = pct, fill = value)) + 
+  facet_wrap(~name, nrow=1) + 
+  labs(x = 'of Sea Level Rise Zone', y = 'Proportion of Respodents\nwith Concern', fill = 'Level of\nConcern') + 
+  scale_fill_brewer(palette="GnBu")+
+  theme_classic() + 
+  theme(legend.position='bottom', text=element_text(size=20))
+
+
+data %>%
+  select(starts_with('treat_'), starts_with('dv_'), geo, slr) %>%
+  pivot_longer(cols=starts_with('dv_')) %>%
+  filter(!is.na(slr) & !is.na(value) & treat_map == 0) %>%
+  group_by(name) %>%
+  
+  # run a ttest
+  do(tidy(t.test(value ~ slr, data = .))) %>%
+  mutate(name = dv.naming(name)) %>%
+  filter(!is.na(name)) %>%
+  arrange(name) %>%
+  select(` ` = name, `Mean Inside SLR` = estimate2, `Mean Outside SLR` = estimate1, Difference = estimate, `p value` = p.value) -> diff_table
+print(xtable(diff_table, 
+             caption = 'Two-sample t-test of difference in mean levels of concern between respondents inside and outside of Sea Level Rise zones. Concern variable is scaled to range between 0 and 1.',
+             label = 'tab:ttest_main'), 
+      include.rownames=F)
+
+ks.test(x = data %>%
+          filter(treat_map == 0 & slr==T) %>%
+          select(dv_personal) %>%
+          unlist() %>%
+          as.numeric(),
+        y = data %>%
+          filter(treat_map == 0 & slr==F) %>%
+          select(dv_personal) %>%
+          unlist() %>%
+          as.numeric())
+
+data %>%
+  select(starts_with('treat_'), starts_with('dv_'), geo, slr) %>%
+  pivot_longer(cols=starts_with('dv_')) %>%
+  filter(!is.na(slr) & !is.na(value) & treat_map == 0) %>%
+  group_by(name) %>%
+  do(tidy(ks.test(value ~ slr, data = .)))
+
+data %>%
+  select(starts_with('treat_'), starts_with('dv_'), geo, slr) %>%
+  pivot_longer(cols=starts_with('dv_')) %>%
+  group_by(name, slr) %>%
+  filter(!is.na(slr)) %>%
+  do(tidy(lm_robust(value ~ treat_map, 
+                    fixed_effects=~geo,
+                    se_type = 'HC1',
+                    data=.))) %>%
+  mutate(term = case_when(term=='treat_trafTRUE' ~ "Traffic Treatment",
+                          slr==FALSE & term=="treat_mapTRUE" ~ "Live Outside\nof SLR Zone",
+                          slr==TRUE & term=="treat_mapTRUE" ~ "Live Within\nSLR Zone",
+                          term=='treat_mapTRUE:treat_trafTRUE' ~ "Interaction"),
+         name = dv.naming(name)) %>%
+  filter(!is.na(name) & !is.na(term)) -> reg_results
+ggplot(reg_results) + 
+  geom_hline(yintercept=0, lty=2) + 
+  geom_pointrange(aes(x=term, y=estimate, ymin = (estimate - 1.96*std.error), ymax=(estimate + 1.96*std.error))) + 
+  #geom_pointrange(aes(x=var, y=estimate, ymin = (estimate - 1.65*std.error), ymax=(estimate + 1.65*std.error)), fatten=2, size=1.1) + 
+  coord_flip() +  
+  facet_wrap(~name, nrow=1) + 
+  labs(x='', y = '') +
+  theme_classic() +
+  theme(legend.position='bottom', legend.title=element_blank(), 
+        text=element_text(size=20)) 
+```
+
