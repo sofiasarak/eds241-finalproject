@@ -187,20 +187,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(estimatr)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Load CA survey data</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>data_ca <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/SeaLevelRiseSurvey_California_January+16,+2021_13.54.csv"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  .[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),] <span class="sc">%&gt;%</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">geo =</span> <span class="st">"CA"</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Load CA distance-to-boundary file</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>dist_ca <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/ca_dist_mins.csv"</span>)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Load CA combined metadata</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>cw_ca <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/ca_combined_final_withtraffic_sub.csv"</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Load flood zone file</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>fld_zone <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/fld_zone.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Load CA survey data</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>data_ca <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/SeaLevelRiseSurvey_California_January+16,+2021_13.54.csv"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  .[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),] <span class="sc">%&gt;%</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">geo =</span> <span class="st">"CA"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Load CA distance-to-boundary file</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>dist_ca <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/ca_dist_mins.csv"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Load CA combined metadata</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>cw_ca <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/ca_combined_final_withtraffic_sub.csv"</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Load flood zone file</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>fld_zone <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/fld_zone.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="merge-survey-distance-and-flood-zone" class="level2">
@@ -282,6 +283,770 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove NA values</span></span>
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(dv_personal), <span class="sc">!</span><span class="fu">is.na</span>(dist_min))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
+<section id="california-only-covariate-balance-table" class="level2">
+<h2 class="anchored" data-anchor-id="california-only-covariate-balance-table">California-Only Covariate Balance Table</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data_ca_clean <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(race, edu, gender, ideo, party, dist_min, treat_map) <span class="sc">|&gt;</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> treat_map,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(<span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">modify_header</span>(label <span class="sc">~</span><span class="st">"**Covariate**"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">modify_spanning_header</span>(<span class="fu">c</span>(<span class="st">"stat_1"</span>, <span class="st">"stat_2"</span>) <span class="sc">~</span> <span class="st">"**Map Treatment**"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="ezrlfnsoge" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ezrlfnsoge table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ezrlfnsoge thead, #ezrlfnsoge tbody, #ezrlfnsoge tfoot, #ezrlfnsoge tr, #ezrlfnsoge td, #ezrlfnsoge th {
+  border-style: none;
+}
+
+#ezrlfnsoge p {
+  margin: 0;
+  padding: 0;
+}
+
+#ezrlfnsoge .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ezrlfnsoge .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ezrlfnsoge .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ezrlfnsoge .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ezrlfnsoge .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ezrlfnsoge .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ezrlfnsoge .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ezrlfnsoge .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ezrlfnsoge .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ezrlfnsoge .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ezrlfnsoge .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ezrlfnsoge .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ezrlfnsoge .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ezrlfnsoge .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ezrlfnsoge .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ezrlfnsoge .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ezrlfnsoge .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ezrlfnsoge .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ezrlfnsoge .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ezrlfnsoge .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ezrlfnsoge .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ezrlfnsoge .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ezrlfnsoge .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ezrlfnsoge .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ezrlfnsoge .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ezrlfnsoge .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ezrlfnsoge .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ezrlfnsoge .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ezrlfnsoge .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ezrlfnsoge .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ezrlfnsoge .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ezrlfnsoge .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ezrlfnsoge .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ezrlfnsoge .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ezrlfnsoge .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ezrlfnsoge .gt_left {
+  text-align: left;
+}
+
+#ezrlfnsoge .gt_center {
+  text-align: center;
+}
+
+#ezrlfnsoge .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ezrlfnsoge .gt_font_normal {
+  font-weight: normal;
+}
+
+#ezrlfnsoge .gt_font_bold {
+  font-weight: bold;
+}
+
+#ezrlfnsoge .gt_font_italic {
+  font-style: italic;
+}
+
+#ezrlfnsoge .gt_super {
+  font-size: 65%;
+}
+
+#ezrlfnsoge .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ezrlfnsoge .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ezrlfnsoge .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ezrlfnsoge .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ezrlfnsoge .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ezrlfnsoge .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ezrlfnsoge .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#ezrlfnsoge .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#ezrlfnsoge div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="gt_col_headings gt_spanner_row header">
+<th rowspan="2" id="label" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Covariate</strong></th>
+<th colspan="2" id="level 1; stat_1" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+<strong>Map Treatment</strong>
+</div></th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="stat_1" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>FALSE</strong><br>
+N = 356<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+<th id="stat_2" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>TRUE</strong><br>
+N = 324<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">race</td>
+<td class="gt_row gt_center" headers="stat_1"><br>
+</td>
+<td class="gt_row gt_center" headers="stat_2"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;African American</td>
+<td class="gt_row gt_center" headers="stat_1">7 (2.1%)</td>
+<td class="gt_row gt_center" headers="stat_2">3 (1.0%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;African American,Native American</td>
+<td class="gt_row gt_center" headers="stat_1">1 (0.3%)</td>
+<td class="gt_row gt_center" headers="stat_2">0 (0%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;African American,Pacific Islander</td>
+<td class="gt_row gt_center" headers="stat_1">0 (0%)</td>
+<td class="gt_row gt_center" headers="stat_2">1 (0.3%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Asian</td>
+<td class="gt_row gt_center" headers="stat_1">82 (25%)</td>
+<td class="gt_row gt_center" headers="stat_2">89 (29%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Asian,Pacific Islander</td>
+<td class="gt_row gt_center" headers="stat_1">1 (0.3%)</td>
+<td class="gt_row gt_center" headers="stat_2">0 (0%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Asian,Pacific Islander,Other</td>
+<td class="gt_row gt_center" headers="stat_1">0 (0%)</td>
+<td class="gt_row gt_center" headers="stat_2">1 (0.3%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Hispanic</td>
+<td class="gt_row gt_center" headers="stat_1">18 (5.5%)</td>
+<td class="gt_row gt_center" headers="stat_2">10 (3.3%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Hispanic,Native American</td>
+<td class="gt_row gt_center" headers="stat_1">0 (0%)</td>
+<td class="gt_row gt_center" headers="stat_2">1 (0.3%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Native American</td>
+<td class="gt_row gt_center" headers="stat_1">0 (0%)</td>
+<td class="gt_row gt_center" headers="stat_2">1 (0.3%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Other</td>
+<td class="gt_row gt_center" headers="stat_1">9 (2.8%)</td>
+<td class="gt_row gt_center" headers="stat_2">11 (3.6%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Pacific Islander</td>
+<td class="gt_row gt_center" headers="stat_1">2 (0.6%)</td>
+<td class="gt_row gt_center" headers="stat_2">0 (0%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;White/Caucasian</td>
+<td class="gt_row gt_center" headers="stat_1">188 (58%)</td>
+<td class="gt_row gt_center" headers="stat_2">169 (56%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;White/Caucasian,African American</td>
+<td class="gt_row gt_center" headers="stat_1">2 (0.6%)</td>
+<td class="gt_row gt_center" headers="stat_2">3 (1.0%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;White/Caucasian,African American,Hispanic,Asian,Native American,Pacific Islander,Other</td>
+<td class="gt_row gt_center" headers="stat_1">0 (0%)</td>
+<td class="gt_row gt_center" headers="stat_2">1 (0.3%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;White/Caucasian,Asian</td>
+<td class="gt_row gt_center" headers="stat_1">1 (0.3%)</td>
+<td class="gt_row gt_center" headers="stat_2">4 (1.3%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;White/Caucasian,Hispanic</td>
+<td class="gt_row gt_center" headers="stat_1">8 (2.5%)</td>
+<td class="gt_row gt_center" headers="stat_2">6 (2.0%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;White/Caucasian,Hispanic,Asian</td>
+<td class="gt_row gt_center" headers="stat_1">2 (0.6%)</td>
+<td class="gt_row gt_center" headers="stat_2">1 (0.3%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;White/Caucasian,Native American</td>
+<td class="gt_row gt_center" headers="stat_1">4 (1.2%)</td>
+<td class="gt_row gt_center" headers="stat_2">1 (0.3%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;White/Caucasian,Other</td>
+<td class="gt_row gt_center" headers="stat_1">1 (0.3%)</td>
+<td class="gt_row gt_center" headers="stat_2">0 (0%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
+<td class="gt_row gt_center" headers="stat_1">30</td>
+<td class="gt_row gt_center" headers="stat_2">22</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">edu</td>
+<td class="gt_row gt_center" headers="stat_1"><br>
+</td>
+<td class="gt_row gt_center" headers="stat_2"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;2-year College Degree</td>
+<td class="gt_row gt_center" headers="stat_1">20 (6.1%)</td>
+<td class="gt_row gt_center" headers="stat_2">15 (4.9%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;4-year College Degree</td>
+<td class="gt_row gt_center" headers="stat_1">115 (35%)</td>
+<td class="gt_row gt_center" headers="stat_2">98 (32%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Doctoral Degree</td>
+<td class="gt_row gt_center" headers="stat_1">23 (7.1%)</td>
+<td class="gt_row gt_center" headers="stat_2">35 (12%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;High School / GED</td>
+<td class="gt_row gt_center" headers="stat_1">5 (1.5%)</td>
+<td class="gt_row gt_center" headers="stat_2">10 (3.3%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Less than High School</td>
+<td class="gt_row gt_center" headers="stat_1">4 (1.2%)</td>
+<td class="gt_row gt_center" headers="stat_2">0 (0%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Masters Degree</td>
+<td class="gt_row gt_center" headers="stat_1">108 (33%)</td>
+<td class="gt_row gt_center" headers="stat_2">92 (30%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Professional Degree (JD, MD)</td>
+<td class="gt_row gt_center" headers="stat_1">20 (6.1%)</td>
+<td class="gt_row gt_center" headers="stat_2">27 (8.9%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Some college</td>
+<td class="gt_row gt_center" headers="stat_1">30 (9.2%)</td>
+<td class="gt_row gt_center" headers="stat_2">25 (8.2%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Trade school</td>
+<td class="gt_row gt_center" headers="stat_1">1 (0.3%)</td>
+<td class="gt_row gt_center" headers="stat_2">2 (0.7%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
+<td class="gt_row gt_center" headers="stat_1">30</td>
+<td class="gt_row gt_center" headers="stat_2">20</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">gender</td>
+<td class="gt_row gt_center" headers="stat_1"><br>
+</td>
+<td class="gt_row gt_center" headers="stat_2"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Female</td>
+<td class="gt_row gt_center" headers="stat_1">116 (36%)</td>
+<td class="gt_row gt_center" headers="stat_2">131 (43%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Male</td>
+<td class="gt_row gt_center" headers="stat_1">208 (64%)</td>
+<td class="gt_row gt_center" headers="stat_2">172 (57%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
+<td class="gt_row gt_center" headers="stat_1">32</td>
+<td class="gt_row gt_center" headers="stat_2">21</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">ideo</td>
+<td class="gt_row gt_center" headers="stat_1"><br>
+</td>
+<td class="gt_row gt_center" headers="stat_2"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Conservative</td>
+<td class="gt_row gt_center" headers="stat_1">22 (6.8%)</td>
+<td class="gt_row gt_center" headers="stat_2">18 (5.9%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Extremely conservative</td>
+<td class="gt_row gt_center" headers="stat_1">2 (0.6%)</td>
+<td class="gt_row gt_center" headers="stat_2">2 (0.7%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Extremely liberal</td>
+<td class="gt_row gt_center" headers="stat_1">16 (4.9%)</td>
+<td class="gt_row gt_center" headers="stat_2">19 (6.3%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Liberal</td>
+<td class="gt_row gt_center" headers="stat_1">101 (31%)</td>
+<td class="gt_row gt_center" headers="stat_2">105 (35%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Moderate; middle of the road</td>
+<td class="gt_row gt_center" headers="stat_1">89 (27%)</td>
+<td class="gt_row gt_center" headers="stat_2">86 (28%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Slightly conservative</td>
+<td class="gt_row gt_center" headers="stat_1">29 (8.9%)</td>
+<td class="gt_row gt_center" headers="stat_2">18 (5.9%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Slightly liberal</td>
+<td class="gt_row gt_center" headers="stat_1">66 (20%)</td>
+<td class="gt_row gt_center" headers="stat_2">56 (18%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
+<td class="gt_row gt_center" headers="stat_1">31</td>
+<td class="gt_row gt_center" headers="stat_2">20</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">party</td>
+<td class="gt_row gt_center" headers="stat_1"><br>
+</td>
+<td class="gt_row gt_center" headers="stat_2"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Democrat</td>
+<td class="gt_row gt_center" headers="stat_1">186 (57%)</td>
+<td class="gt_row gt_center" headers="stat_2">183 (60%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Independent</td>
+<td class="gt_row gt_center" headers="stat_1">83 (26%)</td>
+<td class="gt_row gt_center" headers="stat_2">79 (26%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Other Party</td>
+<td class="gt_row gt_center" headers="stat_1">26 (8.0%)</td>
+<td class="gt_row gt_center" headers="stat_2">17 (5.6%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Republican</td>
+<td class="gt_row gt_center" headers="stat_1">30 (9.2%)</td>
+<td class="gt_row gt_center" headers="stat_2">24 (7.9%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
+<td class="gt_row gt_center" headers="stat_1">31</td>
+<td class="gt_row gt_center" headers="stat_2">21</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">dist_min</td>
+<td class="gt_row gt_center" headers="stat_1">407 (737)</td>
+<td class="gt_row gt_center" headers="stat_2">335 (759)</td>
+</tr>
+</tbody><tfoot>
+<tr class="gt_footnotes odd">
+<td colspan="3" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> n (%); Mean (SD)</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+</div>
 <p><strong>Data Description:</strong> The final clean data frame contains a total of 123 columns, we will not summarize in entirety here. Those that are necessary for our analysis include:</p>
 <ul>
 <li><code>dv_personal</code>: Survey result, recoded as 0-3 to represent responses “Not at all”, “Only a little”, “A moderate amount”, and “A great deal”, respectively, when residents were asked about SLR concern. This is our <strong>outcome variable</strong>.</li>
@@ -293,8 +1058,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="step-1---estimate-the-ate-of-california" class="level2">
 <h2 class="anchored" data-anchor-id="step-1---estimate-the-ate-of-california">Step 1 - Estimate the ATE of California</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mod_ate <span class="ot">&lt;-</span> <span class="fu">lm_robust</span>(dv_personal <span class="sc">~</span> treat_map, <span class="at">se_type =</span> <span class="st">"HC1"</span>, <span class="at">data =</span> data_ca_clean)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod_ate)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mod_ate <span class="ot">&lt;-</span> <span class="fu">lm_robust</span>(dv_personal <span class="sc">~</span> treat_map, <span class="at">se_type =</span> <span class="st">"HC1"</span>, <span class="at">data =</span> data_ca_clean)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod_ate)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -316,57 +1081,57 @@ F-statistic: 11.51 on 1 and 678 DF,  p-value: 0.0007332</code></pre>
 <section id="step-2-create-distance-bins" class="level2">
 <h2 class="anchored" data-anchor-id="step-2-create-distance-bins">Step 2 — Create distance bins</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>bin_width <span class="ot">&lt;-</span> <span class="dv">50</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>data_ca_binned <span class="ot">&lt;-</span> data_ca_clean <span class="sc">%&gt;%</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">dist_bin =</span> bin_width <span class="sc">*</span> <span class="fu">round</span>(dist_min <span class="sc">/</span> bin_width),</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">dist_bin =</span> <span class="fu">pmax</span>(<span class="fu">pmin</span>(dist_bin, <span class="dv">500</span>), <span class="sc">-</span><span class="dv">500</span>)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>bin_width <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>data_ca_binned <span class="ot">&lt;-</span> data_ca_clean <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">dist_bin =</span> bin_width <span class="sc">*</span> <span class="fu">round</span>(dist_min <span class="sc">/</span> bin_width),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">dist_bin =</span> <span class="fu">pmax</span>(<span class="fu">pmin</span>(dist_bin, <span class="dv">500</span>), <span class="sc">-</span><span class="dv">500</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="step-3---estimate-treatment-effect-within-each-bin" class="level2">
 <h2 class="anchored" data-anchor-id="step-3---estimate-treatment-effect-within-each-bin">Step 3 - Estimate treatment effect within each bin</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>effects_ca <span class="ot">&lt;-</span> data_ca_binned <span class="sc">%&gt;%</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(dist_bin) <span class="sc">%&gt;%</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">n</span>() <span class="sc">&gt;=</span> <span class="dv">15</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">do</span>(<span class="fu">tidy</span>(<span class="fu">lm_robust</span>(</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    dv_personal <span class="sc">~</span> treat_map,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">se_type =</span> <span class="st">"HC1"</span>,</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> .</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  ))) <span class="sc">%&gt;%</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">"treat_mapTRUE"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">ci_low =</span> estimate <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> std.error,</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">ci_high =</span> estimate <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> std.error</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>effects_ca <span class="ot">&lt;-</span> data_ca_binned <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(dist_bin) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">n</span>() <span class="sc">&gt;=</span> <span class="dv">15</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">do</span>(<span class="fu">tidy</span>(<span class="fu">lm_robust</span>(</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    dv_personal <span class="sc">~</span> treat_map,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">se_type =</span> <span class="st">"HC1"</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> .</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  ))) <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">"treat_mapTRUE"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">ci_low =</span> estimate <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> std.error,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">ci_high =</span> estimate <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> std.error</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="step-4---plot-california--only-figure" class="level2">
 <h2 class="anchored" data-anchor-id="step-4---plot-california--only-figure">Step 4 - Plot California- Only Figure</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(effects_ca, <span class="fu">aes</span>(<span class="at">x =</span> dist_bin, <span class="at">y =</span> estimate)) <span class="sc">+</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> ci_low, <span class="at">ymax =</span> ci_high), <span class="at">width =</span> <span class="dv">20</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Outcome: Sense of personal harm (California only)"</span>,</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Treatment effect of map by distance from SLR boundary"</span>,</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Distance from SLR boundary (negative = inside SLR zone)"</span>,</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Treatment effect of map"</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(effects_ca, <span class="fu">aes</span>(<span class="at">x =</span> dist_bin, <span class="at">y =</span> estimate)) <span class="sc">+</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> ci_low, <span class="at">ymax =</span> ci_high), <span class="at">width =</span> <span class="dv">20</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Outcome: Sense of personal harm (California only)"</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Treatment effect of map by distance from SLR boundary"</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Distance from SLR boundary (negative = inside SLR zone)"</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Treatment effect of map"</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ca_only_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="ca_only_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>

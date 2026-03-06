@@ -44,7 +44,7 @@ Control (treat_map = 0): See no map
 
 Because treatment is randomized, the difference in outcomes between treated and control respondents is meant to be a causal estimate of the map’s effect.
 
-Additionally, the study utilized a geographic risk discontuity design to test whether there was a difference in concern between respondents that were just within or just outside of the flood zone. Under these assumptions, these residents should be relatively similar in most covariates other than the risk to sea level rise. A jump in concern between groups on either side of the threshold would indicate a treatment effect.
+Additionally, the study utilized a geographic risk discontinuity design to test whether there was a difference in concern between respondents that were just within or just outside of the flood zone. Under these assumptions, these residents should be relatively similar in most covariates other than the risk to sea level rise. A jump in concern between groups on either side of the threshold would indicate a treatment effect.
 
 ### Survey Methods
 
@@ -96,6 +96,7 @@ The treatment effect is negative (reduces concern of SLR risk), regardless of ge
 library(tidyverse)
 library(broom)
 library(estimatr)
+library(gtsummary)
 ```
 
 ## Load and Clean California Data
@@ -191,6 +192,18 @@ data_ca_clean <- data_ca %>%
   # Remove NA values
   filter(!is.na(dv_personal), !is.na(dist_min))
 
+```
+
+## California-Only Covariate Balance Table
+
+```{r}
+data_ca_clean |> 
+  select(race, edu, gender, ideo, party, dist_min, treat_map) |> 
+  tbl_summary(
+    by = treat_map,
+    statistic = list(all_continuous() ~ "{mean} ({sd})")) |> 
+  modify_header(label ~"**Covariate**") |> 
+  modify_spanning_header(c("stat_1", "stat_2") ~ "**Map Treatment**")
 ```
 
 **Data Description:** The final clean data frame contains a total of 123 columns, we will not summarize in entirety here. Those that are necessary for our analysis include:
