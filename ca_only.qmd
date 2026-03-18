@@ -250,6 +250,7 @@ data_ca_clean <- data_ca %>%
 ## California-Only Covariate Balance Table
 
 ```{r}
+#| output: false
 # Create balance table comparing groups that did and did not receive treatment
 data_ca_clean |> 
   select(race, edu, gender, ideo, party, dist_min, treat_map) |> 
